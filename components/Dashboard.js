@@ -1,10 +1,11 @@
 import * as firebase from 'firebase';
 import React, { Component } from 'react';
 import ReactNative from 'react-native';
+import ActionButton from 'react-native-action-button';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+const CategoryListItem = require('../components/CategoryListItem');
 
-const ListItem = require('../components/ListItem');
-
-const { View, ToolbarAndroid, Text, StyleSheet, ListView, Alert} = ReactNative;
+const { View, ToolbarAndroid, Text, StyleSheet, ListView, Alert, Navigator} = ReactNative;
 class Dashboard extends React.Component{
 
   constructor(props){
@@ -14,52 +15,62 @@ class Dashboard extends React.Component{
         rowHasChanged: (row1, row2) => row1 !== row2,
       })
     };
-    this.resourcesRef = this.getRef().child('resources');
+    this.categoriesRef = this.getRef().child('categories');
   }
 
   getRef(){
     return firebaseApp.database().ref();
   }
 
-  listenForResources(resourcesRef){
-    resourcesRef.on('value', (snap) => {
-      console.log("snap is " + snap);
-      var resources = [];
+  listenForCategories(categoriesRef){
+    categoriesRef.on('value', (snap) => {
+      var categories = [];
       snap.forEach((child) => {
-        resources.push({
+        categories.push({
           title: child.val().title,
           _key: child.key
         });
       });
       this.setState({
-        dataSource: this.state.dataSource.cloneWithRows(resources)
+        dataSource: this.state.dataSource.cloneWithRows(categories)
       });
     });
   }
 
-  _renderResource(resource) {
+  _renderCategory(category) {
     const onPress = () => {
-      Alert.alert('resource has been pressed!');
+      this.props.navigator.push({
+        id: 'programsList',
+        passProps: {
+          title:category.title,
+        },
+      });
     };
-
-    return (<ListItem item={resource} onPress={onPress} />);
+    return (<CategoryListItem item={category} onPress={onPress} />);
   }
+
   render() {
     return (
       <View style={styles.container}>
         <ToolbarAndroid style={styles.toolbar}
                         navIcon={{uri:"ic_menu_white_24dp"}}
-                        title="Dashboard"
+                        title="What I Need"
                         onIconClicked={this.props.navigator.pop}
                         actions={[{title: 'Feedback', icon: {uri:"ic_feedback_white_24dp"}, show: 'always', showWithText:true}]}
                         titleColor={'#FFFFFF'}/>
-        <ListView dataSource={this.state.dataSource} renderRow={this._renderResource.bind(this)} enableEmptySections={true} style={styles.listView} />
-
+        <ListView dataSource={this.state.dataSource} renderRow={this._renderCategory.bind(this)} enableEmptySections={true} style={styles.listView} />
+        <ActionButton
+            buttonColor="#FF5252"
+            offsetX={16}
+            offsetY={0}
+            onPress={() => { console.log("search button tapped")}}
+            icon={<Icon name="search" size={30} color="#FFFFFF" />}
+        />
       </View>
     );
   }
   componentDidMount(){
-    this.listenForResources(this.resourcesRef);
+    this.listenForCategories(this.categoriesRef);
   }
 
 };
