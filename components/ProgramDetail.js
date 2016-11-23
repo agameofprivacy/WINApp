@@ -118,17 +118,19 @@ class ProgramDetail extends React.Component{
     if (typeof this.props.passProps.program[encodeURIComponent("Veterans: Specialty")] !== 'undefined' && decodeURIComponent(this.props.passProps.program[encodeURIComponent("Veterans: Specialty")]) === "Veterans: Specialty"){
         populationsServed.push("Veterans");
     }
-    if (populationsServed.length > 0){
-        var populationsServedSubtitleString = "";
-        for (var pop in populationsServed){
-            if (pop != 0){
-                populationsServedSubtitleString += ', ';
-            }
-            populationsServedSubtitleString += populationsServed[pop];
-        }
-        rowData.push({subtitle:populationsServedSubtitleString, image:'info', title:"Population Served"});
+    // if (populationsServed.length > 0){
+    //     var populationsServedSubtitleString = "";
+    //     for (var pop in populationsServed){
+    //         if (pop != 0){
+    //             populationsServedSubtitleString += ', ';
+    //         }
+    //         populationsServedSubtitleString += populationsServed[pop];
+    //     }
+    //     rowData.push({subtitle:populationsServedSubtitleString, image:'info', title:"Population Served"});
+    // }
+    if (typeof this.props.passProps.program.populationserved !== "undefined" && decodeURIComponent(this.props.passProps.program.populationserved).toUpperCase() !== "NULL"){
+        rowData.push({subtitle:decodeURIComponent(this.props.passProps.program.populationserved), image:'info', title:"Population Served"});
     }
-    
     this.state = {
       dataSource: new ListView.DataSource({
         rowHasChanged: (row1, row2) => row1 !== row2,
