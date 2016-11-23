@@ -30,6 +30,8 @@ class ProgramsList extends React.Component{
           ophours: child.val().ophours,
           nameofprogram: child.val().nameofprogram,
           shortdescription: child.val().shortdescription,
+          ContactPhone: child.val().ContactPhone,
+          ContactName: child.val().ContactName,
           _key: child.key
         });
       });
