@@ -25,6 +25,9 @@ class ProgramsList extends React.Component{
     programsRef.orderByChild(encodeURIComponent(this.props.passProps.title)).equalTo(encodeURIComponent(this.props.passProps.title)).on('value', (snap) => {
       var programs = [];
       snap.forEach((child) => {
+        var fosterYouthSpecialtyKey = encodeURIComponent("Foster Youth: Specialty");
+        var lgbtqSpecialtyKey = encodeURIComponent("LGBTQ: Specialty");
+        var veteransSpecialtyKey = encodeURIComponent("Veterans: Specialty");
         programs.push({
           nameofagency: child.val().nameofagency,
           ophours: child.val().ophours,
@@ -32,8 +35,21 @@ class ProgramsList extends React.Component{
           shortdescription: child.val().shortdescription,
           ContactPhone: child.val().ContactPhone,
           ContactName: child.val().ContactName,
+          addressline1: child.val().addressline1,
+          addressline2: child.val().addressline2,
+          city: child.val().city,
+          state: child.val().state,
+          zip: child.val().zip,
+          lat: child.val().lat,
+          lon: child.val().lon,
+          Website: child.val().Website,
+          websitealt1: child.val().websitealt1,
+          websitealt2: child.val().websitealt2,
           _key: child.key
         });
+        programs[programs.length - 1][fosterYouthSpecialtyKey] = child.val()[fosterYouthSpecialtyKey];
+        programs[programs.length - 1][lgbtqSpecialtyKey] = child.val()[lgbtqSpecialtyKey];
+        programs[programs.length - 1][veteransSpecialtyKey] = child.val()[veteransSpecialtyKey];
       });
       this.setState({
         dataSource: this.state.dataSource.cloneWithRows(programs)

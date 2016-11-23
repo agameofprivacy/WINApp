@@ -8481,6 +8481,9 @@ export default class WINApp extends Component {
         if (key === "fromage" || key === "toage" || key === "lat" || key === "lon"){
           newProgram.child(encodeURIComponent(key)).set(programs[program][key]);
         }
+        else if (key === "zip"){
+          newProgram.child(encodeURIComponent(key)).set("" + programs[program][key]);
+        }
         else if (programs[program][key] !== ""){
           if (typeof programs[program][key] === "string" && programs[program][key].toUpperCase() !== "NIL" && programs[program][key].toUpperCase() !== "NULL" && programs[program][key].toUpperCase() !== "NAN"){
             newProgram.child(encodeURIComponent(key)).set(encodeURIComponent(programs[program][key]));

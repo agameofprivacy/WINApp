@@ -51,10 +51,84 @@ class ProgramDetail extends React.Component{
                 }
                 count += 1;
             }
-        }
-        
-
+        }       
     }
+    var addressline1 = this.props.passProps.program.addressline1;
+    var addressline2 = this.props.passProps.program.addressline2;
+    var city = this.props.passProps.program.city;
+    var state = this.props.passProps.program.state;
+    var zip = this.props.passProps.program.zip;
+    var lat = this.props.passProps.program.lat;
+    var lon = this.props.passProps.program.lon;
+
+    var placeTitleString = "";
+    var placeSubtitleString = "";
+    if (typeof addressline1 !== 'undefined' && decodeURIComponent(addressline1).toUpperCase() !== "NULL"){
+        placeTitleString += decodeURIComponent(addressline1);
+    }
+    if (typeof addressline2 !== 'undefined' && decodeURIComponent(addressline2).toUpperCase() !== "NULL"){
+        placeSubtitleString += " " + decodeURIComponent(addressline2);
+    }
+    if (typeof city !== 'undefined' && decodeURIComponent(city).toUpperCase() !== "NULL"){
+        if (placeSubtitleString !== ""){
+            placeSubtitleString += ", ";
+        }
+        placeSubtitleString += decodeURIComponent(city);
+    }
+    if (typeof state !== 'undefined' && decodeURIComponent(state).toUpperCase() !== "NULL"){
+        if (placeSubtitleString !== ""){
+            placeSubtitleString += ", ";
+        }
+        placeSubtitleString += decodeURIComponent(state);
+    }
+    if (typeof zip !== 'undefined' && decodeURIComponent(zip).toUpperCase() !== "NULL"){
+        if (placeSubtitleString !== ""){
+            placeSubtitleString += ", ";
+        }
+        placeSubtitleString += decodeURIComponent(zip);
+    }
+
+    if (placeTitleString !== "" || placeSubtitleString !== ""){
+        if (placeSubtitleString === "" && placeTitleString !== ""){
+            rowData.push({subtitle:placeTitleString, image:'place', title:"Location"});
+        }
+        else{
+            rowData.push({subtitle:placeSubtitleString, image:'place', title:placeTitleString});
+        }
+    }
+    if (typeof this.props.passProps.program.Website !== 'undefined' && decodeURIComponent(this.props.passProps.program.Website).toUpperCase() !== "NULL"){
+        rowData.push({subtitle:decodeURIComponent(this.props.passProps.program.Website), image:'link', title:"Website"});
+    }
+    if (typeof this.props.passProps.program.websitealt1 !== 'undefined' && decodeURIComponent(this.props.passProps.program.websitealt1).toUpperCase() !== "NULL"){
+        rowData.push({subtitle:decodeURIComponent(this.props.passProps.program.websitealt1), title:"Alternative Website"});
+    }
+    if (typeof this.props.passProps.program.websitealt2 !== 'undefined' && decodeURIComponent(this.props.passProps.program.websitealt2).toUpperCase() !== "NULL"){
+        rowData.push({subtitle:decodeURIComponent(this.props.passProps.program.websitealt2), title:"Alternative Website"});
+    }
+    if (typeof this.props.passProps.program.nameofagency !== 'undefined' && decodeURIComponent(this.props.passProps.nameofagency).toUpperCase()!== "NULL"){
+        rowData.push({subtitle:decodeURIComponent(this.props.passProps.program.nameofagency), title:"Agency's Other Programs", image:'list'});
+    }
+    var populationsServed = [];
+    if (typeof this.props.passProps.program[encodeURIComponent("Foster Youth: Specialty")] !== 'undefined' && decodeURIComponent(this.props.passProps.program[encodeURIComponent("Foster Youth: Specialty")]) === "Foster Youth: Specialty"){
+        populationsServed.push("Foster Youth");
+    }
+    if (typeof this.props.passProps.program[encodeURIComponent("LGBTQ: Specialty")] !== 'undefined' && decodeURIComponent(this.props.passProps.program[encodeURIComponent("LGBTQ: Specialty")]) === "LGBTQ: Specialty"){
+        populationsServed.push("LGBTQ");
+    }
+    if (typeof this.props.passProps.program[encodeURIComponent("Veterans: Specialty")] !== 'undefined' && decodeURIComponent(this.props.passProps.program[encodeURIComponent("Veterans: Specialty")]) === "Veterans: Specialty"){
+        populationsServed.push("Veterans");
+    }
+    if (populationsServed.length > 0){
+        var populationsServedSubtitleString = "";
+        for (var pop in populationsServed){
+            if (pop != 0){
+                populationsServedSubtitleString += ', ';
+            }
+            populationsServedSubtitleString += populationsServed[pop];
+        }
+        rowData.push({subtitle:populationsServedSubtitleString, image:'info', title:"Population Served"});
+    }
+    
     this.state = {
       dataSource: new ListView.DataSource({
         rowHasChanged: (row1, row2) => row1 !== row2,
