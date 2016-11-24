@@ -46,6 +46,9 @@ class ProgramsList extends React.Component{
           websitealt1: child.val().websitealt1,
           websitealt2: child.val().websitealt2,
           populationserved: child.val().populationserved,
+          fromage: child.val().fromage,
+          toage: child.val().toage,
+          Languages: child.val().Languages,
           _key: child.key
         });
         programs[programs.length - 1][fosterYouthSpecialtyKey] = child.val()[fosterYouthSpecialtyKey];

@@ -131,6 +131,17 @@ class ProgramDetail extends React.Component{
     if (typeof this.props.passProps.program.populationserved !== "undefined" && decodeURIComponent(this.props.passProps.program.populationserved).toUpperCase() !== "NULL"){
         rowData.push({subtitle:decodeURIComponent(this.props.passProps.program.populationserved), image:'info', title:"Population Served"});
     }
+    if (typeof this.props.passProps.program.fromage !== "undefined" && typeof this.props.passProps.program.fromage !== "undefined"){
+        rowData.push({subtitle:"" + this.props.passProps.program.fromage + " to " + this.props.passProps.program.toage, title:"Age"});
+    }
+    if (typeof this.props.passProps.program.Languages !== 'undefined' && decodeURIComponent(this.props.passProps.program.Languages).toUpperCase() !== "NULL"){
+        var languagesString = decodeURIComponent(this.props.passProps.program.Languages);
+        if (languagesString.charAt(languagesString.length - 1) === ','){
+            languagesString = languagesString.substring(0, languagesString.length - 1);
+        }
+        rowData.push({subtitle:languagesString, title:"Languages"});
+    }
+
     this.state = {
       dataSource: new ListView.DataSource({
         rowHasChanged: (row1, row2) => row1 !== row2,
