@@ -105,9 +105,6 @@ class ProgramDetail extends React.Component{
     if (typeof this.props.passProps.program.websitealt2 !== 'undefined' && decodeURIComponent(this.props.passProps.program.websitealt2).toUpperCase() !== "NULL"){
         rowData.push({subtitle:decodeURIComponent(this.props.passProps.program.websitealt2), title:"Alternative Website"});
     }
-    if (typeof this.props.passProps.program.nameofagency !== 'undefined' && decodeURIComponent(this.props.passProps.nameofagency).toUpperCase()!== "NULL"){
-        rowData.push({subtitle:decodeURIComponent(this.props.passProps.program.nameofagency), title:"Agency's Other Programs", image:'list'});
-    }
     var populationsServed = [];
     if (typeof this.props.passProps.program[encodeURIComponent("Foster Youth: Specialty")] !== 'undefined' && decodeURIComponent(this.props.passProps.program[encodeURIComponent("Foster Youth: Specialty")]) === "Foster Youth: Specialty"){
         populationsServed.push("Foster Youth");
@@ -141,6 +138,16 @@ class ProgramDetail extends React.Component{
         }
         rowData.push({subtitle:languagesString, title:"Languages"});
     }
+    if (typeof this.props.passProps.program.description !== 'undefined' && decodeURIComponent(this.props.passProps.program.description).toUpperCase() !== "NULL"){
+        rowData.push({subtitle:decodeURIComponent(this.props.passProps.program.description), title:"Description of Services"});
+    }
+
+    if (typeof this.props.passProps.program.nameofagency !== 'undefined' && decodeURIComponent(this.props.passProps.nameofagency).toUpperCase()!== "NULL"){
+        rowData.push({subtitle:decodeURIComponent(this.props.passProps.program.nameofagency), title:"Agency's Other Programs", image:'list'});
+    }
+
+    var servicesTypes = [];
+    
 
     this.state = {
       dataSource: new ListView.DataSource({
@@ -171,7 +178,7 @@ class ProgramDetail extends React.Component{
                         onIconClicked={this.props.navigator.pop}
                         actions={[{title: 'Share', icon: {uri:"ic_share_white_24dp"}, show: 'always', showWithText:true}]}
                         titleColor={'#FFFFFF'}/>
-        <ListView automaticallyAdjustContentInsets={false} dataSource={this.state.dataSource} renderRow={this._renderRow} style={styles.listView} removeClippedSubviews={false}/>
+        <ListView contentContainerStyle={styles.contentContainer} automaticallyAdjustContentInsets={false} dataSource={this.state.dataSource} renderRow={this._renderRow} style={styles.listView} removeClippedSubviews={false}/>
         <ActionButton
             buttonColor="#FF5252"
             offsetX={16}
@@ -196,8 +203,10 @@ const styles = StyleSheet.create({
     height:56,
   },
   listView: {
-    backgroundColor:'#ffffff',
-    
+    backgroundColor:'#ffffff',    
+  },
+  contentContainer:{
+      paddingBottom:80,
   },
 });
 

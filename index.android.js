@@ -8431,6 +8431,7 @@ const {
   Alert,
   Navigator,
   ToolbarAndroid,
+  BackAndroid,
 } = ReactNative;
 
 
@@ -8470,8 +8471,17 @@ export default class WINApp extends Component {
     }
   }
 
+
+
   componentDidMount(){
     // this.processPrograms();
+    BackAndroid.addEventListener('hardwareBackPress', () => {
+      if (_navigator.getCurrentRoutes().length === 1  ) {
+        return false;
+      }
+      _navigator.pop();
+      return true;
+    });
   }
 
   processPrograms(){
