@@ -141,7 +141,15 @@ class ProgramDetail extends React.Component{
     if (typeof this.props.passProps.program.description !== 'undefined' && decodeURIComponent(this.props.passProps.program.description).toUpperCase() !== "NULL"){
         rowData.push({subtitle:decodeURIComponent(this.props.passProps.program.description), title:"Description of Services"});
     }
-
+    if (typeof this.props.passProps.program.servicesKeys !== 'undefined' && this.props.passProps.program.servicesKeys.length !== 0){
+        var servicesString = "";
+        for (var key in this.props.passProps.program.servicesKeys){
+            if (typeof this.props.passProps.program[this.props.passProps.program.servicesKeys[key]] !== 'undefined'){
+                servicesString += (" • 	" + decodeURIComponent(this.props.passProps.program.servicesKeys[key]) + "\n");
+            }
+        }
+        rowData.push({subtitle:servicesString, title:"Services"});
+    }
     if (typeof this.props.passProps.program.nameofagency !== 'undefined' && decodeURIComponent(this.props.passProps.nameofagency).toUpperCase()!== "NULL"){
         rowData.push({subtitle:decodeURIComponent(this.props.passProps.program.nameofagency), title:"Agency's Other Programs", image:'list'});
     }
