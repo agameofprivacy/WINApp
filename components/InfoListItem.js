@@ -13,13 +13,17 @@ class InfoListItem extends Component {
     else{
         labelsContainerStyle = styles.labelsContainerWithoutImage;
     }
+    var subtitleStyle = styles.subtitle;
+    if (decodeURIComponent(this.props.item.title) === "Services"){
+        subtitleStyle = styles.subtitleList;
+    }
     return (
       <TouchableNativeFeedback onPress={this.props.onPress}>
         <View style={styles.containerView}>
             {imageContent}
             <View style={labelsContainerStyle}>
                 <Text style={styles.title}>{decodeURIComponent(this.props.item.title)}</Text>
-                <Text style={styles.subtitle}>{decodeURIComponent(this.props.item.subtitle)}</Text>
+                <Text style={subtitleStyle}>{decodeURIComponent(this.props.item.subtitle)}</Text>
             </View>
         </View>
       </TouchableNativeFeedback>
@@ -61,6 +65,13 @@ const styles = StyleSheet.create({
       color:'rgba(0,0,0,0.54)',
       marginLeft:32,
       marginRight:16,
+  },
+  subtitleList:{
+      fontSize: 14,
+      color:'rgba(0,0,0,0.54)',
+      marginLeft:32,
+      marginRight:16,
+      lineHeight: 24,
   },
 });
 

@@ -141,14 +141,19 @@ class ProgramDetail extends React.Component{
     if (typeof this.props.passProps.program.description !== 'undefined' && decodeURIComponent(this.props.passProps.program.description).toUpperCase() !== "NULL"){
         rowData.push({subtitle:decodeURIComponent(this.props.passProps.program.description), title:"Description of Services"});
     }
-    if (typeof this.props.passProps.program.servicesKeys !== 'undefined' && this.props.passProps.program.servicesKeys.length !== 0){
+    if (typeof this.props.passProps.program.servicesKeys !== 'undefined'){
         var servicesString = "";
+        var servicesKeysForProgram = [];
         for (var key in this.props.passProps.program.servicesKeys){
             if (typeof this.props.passProps.program[this.props.passProps.program.servicesKeys[key]] !== 'undefined'){
-                servicesString += (" • 	" + decodeURIComponent(this.props.passProps.program.servicesKeys[key]) + "\n");
+                servicesString += (" • 	  " + decodeURIComponent(this.props.passProps.program.servicesKeys[key]) + "\n");
+                servicesKeysForProgram.push(decodeURIComponent(this.props.passProps.program.servicesKeys[key]));
             }
         }
-        rowData.push({subtitle:servicesString, title:"Services"});
+        console.log("Services keys is " + this.props.passProps.program.servicesKeys);
+        if (servicesKeysForProgram.length > 0){
+            rowData.push({subtitle:servicesString, title:"Services"});
+        }
     }
     if (typeof this.props.passProps.program.nameofagency !== 'undefined' && decodeURIComponent(this.props.passProps.nameofagency).toUpperCase()!== "NULL"){
         rowData.push({subtitle:decodeURIComponent(this.props.passProps.program.nameofagency), title:"Agency's Other Programs", image:'list'});
@@ -164,6 +169,15 @@ class ProgramDetail extends React.Component{
     };
   }
 
+  handleScroll(event){
+      console.log(event.nativeEvent.contentOffset.y);
+  }
+
+  _onChangeVisibleRows(visibleRows, changedRows){
+    console.log(changedRows);
+  }
+
+
   _renderRow(props) {
     const onPress = () => {
         console.log("row tapped")
@@ -178,15 +192,22 @@ class ProgramDetail extends React.Component{
   }
 
   render() {
+      var titleString;
+      if (typeof this.props.passProps.program.nameofprogram !== 'undefined' && decodeURIComponent(this.props.passProps.program.nameofprogram).toUpperCase() !== 'NULL'){
+          titleString = decodeURIComponent(this.props.passProps.program.nameofprogram);
+      }
+      else{
+          titleString = decodeURIComponent(this.props.passProps.program.nameofagency);
+      }
     return (
       <View style={styles.container}>
         <ToolbarAndroid style={styles.toolbar}
                         navIcon={{uri:"ic_arrow_back_white_24dp"}}
-                        title=""
+                        title={""}
                         onIconClicked={this.props.navigator.pop}
                         actions={[{title: 'Share', icon: {uri:"ic_share_white_24dp"}, show: 'always', showWithText:true}]}
                         titleColor={'#FFFFFF'}/>
-        <ListView contentContainerStyle={styles.contentContainer} automaticallyAdjustContentInsets={false} dataSource={this.state.dataSource} renderRow={this._renderRow} style={styles.listView} removeClippedSubviews={false}/>
+        <ListView contentContainerStyle={styles.contentContainer} automaticallyAdjustContentInsets={false} dataSource={this.state.dataSource} renderRow={this._renderRow} style={styles.listView} removeClippedSubviews={false} onScroll={this.handleScroll}/>
         <ActionButton
             buttonColor="#FF5252"
             offsetX={16}
