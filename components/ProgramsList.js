@@ -1,6 +1,8 @@
 import * as firebase from 'firebase';
 import React, { Component } from 'react';
 import ReactNative from 'react-native';
+import ActionButton from 'react-native-action-button';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import Dimensions from 'Dimensions';
 
 const ProgramListItem = require('../components/ProgramListItem.js');
@@ -303,11 +305,11 @@ class ProgramsList extends React.Component{
     return (
       <View style={styles.container}>
         <View style={styles.fullScreen}>
-          <ToolbarAndroid style={styles.toolbar}
+          <Icon.ToolbarAndroid style={styles.toolbar}
                   navIcon={{uri:"ic_arrow_back_white_24dp"}}
                   title={this.props.passProps.title}
                   onIconClicked={this.props.navigator.pop}
-                  actions={[{title: 'Filter', icon: {uri:"ic_filter_list_white_24dp"}, show: 'always', showWithText:true}]}
+                  actions={[{title: 'Map', iconName:'map', iconSize:24, show: 'always', iconColor:'#FFFFFF'}]}
                   titleColor={'#FFFFFF'}/>
           <ListView dataSource={this.state.dataSource} renderRow={this._renderProgram.bind(this)} enableEmptySections={true} style={styles.listView} />
         </View>
@@ -318,6 +320,13 @@ class ProgramsList extends React.Component{
             size="large"
           />
         </View>
+                  <ActionButton
+            buttonColor="#FF5252"
+            offsetX={16}
+            offsetY={0}
+            onPress={() => { console.log("filter button tapped")}}
+            icon={<Icon name="filter-list" size={30} color="#FFFFFF" />}
+        />
       </View>
     );
   }

@@ -71,13 +71,13 @@ class Dashboard extends React.Component{
               renderNavigationView={() => navigationView}>
         <View style={styles.container}>
           <View style={styles.fullScreen}>
-            <ToolbarAndroid style={styles.toolbar}
+            <Icon.ToolbarAndroid style={styles.toolbar}
                             navIcon={{uri:"ic_menu_white_24dp"}}
                             title="Dashboard"
                             onIconClicked={this.openDrawer}
-                            actions={[{title: 'Feedback', icon: {uri:"ic_feedback_white_24dp"}, show: 'always', showWithText:true}]}
+                            actions={[]}
                             titleColor={'#FFFFFF'}/>
-            <ListView dataSource={this.state.dataSource} renderRow={this._renderCategory.bind(this)} enableEmptySections={true} style={styles.listView} />
+            <ListView contentContainerStyle={styles.contentContainer} dataSource={this.state.dataSource} renderRow={this._renderCategory.bind(this)} enableEmptySections={true} style={styles.listView} />
           </View>
           <View style={styles.floatView}>
             <ActivityIndicator
@@ -128,7 +128,9 @@ const styles = StyleSheet.create({
     top: Dimensions.get('window').height / 2 - 50,
     left: Dimensions.get('window').width / 2 - 50,
   },
-
+  contentContainer:{
+      paddingTop:12,
+  },
 });
 
 module.exports = Dashboard;
