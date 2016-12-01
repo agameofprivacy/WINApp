@@ -8,10 +8,13 @@
   },
   "dependencies": {
     "firebase": "^3.6.0",
+    "format-url": "^1.1.0",
     "react": "^15.3.2",
     "react-native": "^0.38.0",
     "react-native-action-button": "^2.0.15",
+    "react-native-maps": "^0.11.0",
     "react-native-vector-icons": "^3.0.0",
+    "url": "^0.11.0",
     "whatwg-fetch": "^1.1.1"
   },
   "jest": {

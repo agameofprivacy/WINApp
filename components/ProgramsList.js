@@ -262,6 +262,8 @@ class ProgramsList extends React.Component{
             Showers: child.val().Showers,
             Classes: child.val().Classes,
             Wifi: child.val().Wifi,
+            lon: child.val().lon,
+            lat: child.val().lat,
             _key: child.key
           });
           for (var key in keys){

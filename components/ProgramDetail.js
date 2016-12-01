@@ -3,14 +3,17 @@ import React, { Component } from 'react';
 import ReactNative from 'react-native';
 import ActionButton from 'react-native-action-button';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+
 const InfoListItem = require('../components/InfoListItem.js');
 const InfoHeaderListItem = require('../components/InfoHeaderListItem.js');
 
-const { View, ToolbarAndroid, Text, StyleSheet, ListView, Alert, Navigator} = ReactNative;
+const { View, ToolbarAndroid, Text, StyleSheet, ListView, Alert, Navigator, Linking} = ReactNative;
 class ProgramDetail extends React.Component{
 
   constructor(props){
     super(props);
+    var url = require('url');
+
     var rowData = [];
     if (typeof this.props.passProps.program.nameofprogram !== 'undefined'){
         rowData.push({title:this.props.passProps.program.nameofprogram, subtitle:this.props.passProps.program.nameofagency, header:true});
@@ -44,10 +47,10 @@ class ProgramDetail extends React.Component{
             }
             if (phoneNumber !== "NIL" && typeof phoneNumber !== 'undefined'){
                 if (count === 0){
-                    rowData.push({subtitle:phoneNumber, image:'phone', title:phoneName});
+                    rowData.push({subtitle:phoneNumber, image:'phone', title:phoneName, action:'call', actionData:phoneNumber});
                 }
                 else{
-                    rowData.push({subtitle:phoneNumber, title:phoneName});
+                    rowData.push({subtitle:phoneNumber, title:phoneName, action:'call', actionData:phoneNumber});
                 }
                 count += 1;
             }
@@ -89,21 +92,22 @@ class ProgramDetail extends React.Component{
     }
 
     if (placeTitleString !== "" || placeSubtitleString !== ""){
+        var latLongtString = "" + this.props.passProps.program.lat + ", " + this.props.passProps.program.lon;
         if (placeSubtitleString === "" && placeTitleString !== ""){
-            rowData.push({subtitle:placeTitleString, image:'place', title:"Location"});
+            rowData.push({subtitle:placeTitleString, image:'place', title:"Location", action:'map',actionData:latLongtString});
         }
         else{
-            rowData.push({subtitle:placeSubtitleString, image:'place', title:placeTitleString});
+            rowData.push({subtitle:placeSubtitleString, image:'place', title:placeTitleString, action:'map', actionData:latLongtString});
         }
     }
     if (typeof this.props.passProps.program.Website !== 'undefined' && decodeURIComponent(this.props.passProps.program.Website).toUpperCase() !== "NULL"){
-        rowData.push({subtitle:decodeURIComponent(this.props.passProps.program.Website), image:'link', title:"Website"});
+        rowData.push({subtitle:decodeURIComponent(this.props.passProps.program.Website), image:'link', title:"Website", action:'browse', actionData:decodeURIComponent(this.props.passProps.program.Website)});
     }
     if (typeof this.props.passProps.program.websitealt1 !== 'undefined' && decodeURIComponent(this.props.passProps.program.websitealt1).toUpperCase() !== "NULL"){
-        rowData.push({subtitle:decodeURIComponent(this.props.passProps.program.websitealt1), title:"Alternative Website"});
+        rowData.push({subtitle:decodeURIComponent(this.props.passProps.program.websitealt1), title:"Alternative Website", action:'browse', actionData:decodeURIComponent(this.props.passProps.program.websitealt1)});
     }
     if (typeof this.props.passProps.program.websitealt2 !== 'undefined' && decodeURIComponent(this.props.passProps.program.websitealt2).toUpperCase() !== "NULL"){
-        rowData.push({subtitle:decodeURIComponent(this.props.passProps.program.websitealt2), title:"Alternative Website"});
+        rowData.push({subtitle:decodeURIComponent(this.props.passProps.program.websitealt2), title:"Alternative Website", action:'browse', actionData:decodeURIComponent(this.props.passProps.program.websitealt2)});
     }
     var populationsServed = [];
     if (typeof this.props.passProps.program[encodeURIComponent("Foster Youth: Specialty")] !== 'undefined' && decodeURIComponent(this.props.passProps.program[encodeURIComponent("Foster Youth: Specialty")]) === "Foster Youth: Specialty"){
@@ -156,7 +160,7 @@ class ProgramDetail extends React.Component{
         }
     }
     if (typeof this.props.passProps.program.nameofagency !== 'undefined' && decodeURIComponent(this.props.passProps.nameofagency).toUpperCase()!== "NULL"){
-        rowData.push({subtitle:decodeURIComponent(this.props.passProps.program.nameofagency), title:"Agency's Other Programs", image:'list'});
+        rowData.push({subtitle:decodeURIComponent(this.props.passProps.program.nameofagency), title:"Agency's Other Programs", image:'list', action:'viewAgency', actionData:decodeURIComponent(this.props.passProps.program.nameofagency)});
     }
 
     var servicesTypes = [];
@@ -181,6 +185,43 @@ class ProgramDetail extends React.Component{
   _renderRow(props) {
     const onPress = () => {
         console.log("row tapped")
+        var urlFormat = require('format-url');
+        var sceneId;
+        var linkedURL;
+        switch (props.action){
+            case 'call':
+                linkedURL = "tel:" + props.actionData.replace(/\D/g,'');
+                break;
+            case 'map':
+                linkedURL = 'geo:' + props.actionData;
+                break;
+            case 'browse':
+                linkedURL = urlFormat(props.actionData);
+                break;
+            case 'viewAgency':
+                sceneId = 'agencyPrograms';
+                break;
+            default:
+                console.log("no action case");
+                break;
+        }
+        if (typeof linkedURL !== 'undefined'){
+            Linking.canOpenURL(linkedURL).then(supported => {
+                if (supported) {
+                    Linking.openURL(linkedURL);
+                } else {
+                    console.log('Don\'t know how to open URI: ' + this.props.url);
+                }
+            });
+        };
+        if (typeof sceneId !== 'undefined'){
+            this.props.navigator.push({
+                id: sceneId,
+                passProps: {
+                    actionData:props.actionData,
+                },
+            });
+        }
     };
 
     if (typeof props.header !== 'undefined'){
